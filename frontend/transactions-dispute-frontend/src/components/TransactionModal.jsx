@@ -1,148 +1,126 @@
-import api from "/Users/londolanindou/Projects /rotondwa/transactions-dispute-portal/frontend/transactions-dispute-frontend/src/api/axios";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../api/axios";
+import "../pages/Register.css";
 
-export default function TransactionModal({
-  tx,
-  close,
-  refresh,
-}) {
+export default function Register() {
+  const navigate = useNavigate();
 
-  const disputeTransaction =
-    async () => {
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    username: "",
+    password: "",
+    confirmPassword: "",
+    cellphone: "",
+    gender: "",
+    cardNumber: "",
+  });
 
-      try {
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-        await api.put(
-          `/transactions/${tx.id}/dispute`
-        );
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
-        alert(
-          "Transaction disputed"
-        );
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
 
-        refresh();
+    if (form.password !== form.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
 
-        close();
+    setLoading(true);
 
-      } catch (error) {
+    try {
+      const { confirmPassword, ...payload } = form;
+      await api.post("/auth/register", payload);
+      alert("Registration successful");
+      navigate("/");
+    } catch (err) {
+      console.error(err);
+      // Extract error message from response object or string
+      let errorMessage = "Registration failed";
 
-        console.error(error);
-
-        alert(
-          error.response?.data ||
-          "Failed to dispute transaction"
-        );
+      if (err.response?.data) {
+        const data = err.response.data;
+        // Handle both object responses and string responses
+        if (typeof data === 'string') {
+          errorMessage = data;
+        } else {
+          // Try to extract message from error response object
+          errorMessage = data.error || data.message || errorMessage;
+        }
+      } else if (err.message) {
+        errorMessage = err.message;
       }
-    };
+
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
+      <div className="auth-page">
+        <div className="auth-card register-card">
+          <h1>Create Account</h1>
 
-    <div
-      className="modal-overlay"
-      onClick={close}
-    >
+          {error && <p className="auth-error">{error}</p>}
 
-      <div
-        className="modal"
-        onClick={(e) =>
-          e.stopPropagation()
-        }
-      >
+          <form onSubmit={handleSubmit}>
+            <input name="firstName" placeholder="First Name" onChange={handleChange} required />
+            <input name="lastName" placeholder="Last Name" onChange={handleChange} required />
+            <input name="username" placeholder="Username" onChange={handleChange} required />
 
-        <h2>
-          Transaction Details
-        </h2>
+            <div className="password-field">
+              <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Password"
+                  onChange={handleChange}
+                  required
+              />
+              <input
+                  type={showPassword ? "text" : "password"}
+                  name="confirmPassword"
+                  placeholder="Confirm Password"
+                  onChange={handleChange}
+                  required
+              />
+              <label className="show-password">
+                <input
+                    type="checkbox"
+                    checked={showPassword}
+                    onChange={() => setShowPassword((v) => !v)}
+                />
+                Show passwords
+              </label>
+            </div>
 
-        <div className="detail-row">
-          <strong>Merchant:</strong>
-          <span>{tx.merchantName}</span>
-        </div>
+            <input name="cellphone" placeholder="Cellphone" onChange={handleChange} required />
 
-        <div className="detail-row">
-          <strong>Amount:</strong>
-          <span>
-            {tx.currency} {tx.amount}
-          </span>
-        </div>
+            <select name="gender" onChange={handleChange} required>
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
 
-        <div className="detail-row">
-          <strong>Type:</strong>
-          <span>
-            {tx.transactionType}
-          </span>
-        </div>
+            <input name="cardNumber" placeholder="Card Number" onChange={handleChange} required />
 
-        <div className="detail-row">
-          <strong>Status:</strong>
-          <span>{tx.status}</span>
-        </div>
-
-        <div className="detail-row">
-          <strong>Reference:</strong>
-          <span>
-            {tx.referenceNumber}
-          </span>
-        </div>
-
-        <div className="detail-row">
-          <strong>Payment:</strong>
-          <span>
-            {tx.paymentMethod}
-          </span>
-        </div>
-
-        <div className="detail-row">
-          <strong>Location:</strong>
-          <span>{tx.location}</span>
-        </div>
-
-        <div className="detail-row">
-          <strong>Card:</strong>
-          <span>
-            {tx.maskedCardNumber}
-          </span>
-        </div>
-
-        <div className="detail-row">
-          <strong>Date:</strong>
-          <span>
-            {tx.transactionDate}
-          </span>
-        </div>
-
-        <div className="detail-row">
-          <strong>Disputed:</strong>
-          <span>
-            {
-              tx.disputed
-                ? "YES"
-                : "NO"
-            }
-          </span>
-        </div>
-
-        {
-          !tx.disputed && (
-
-            <button
-              className="dispute-btn"
-              onClick={
-                disputeTransaction
-              }
-            >
-              Mark As Disputed
+            <button type="submit" disabled={loading}>
+              {loading ? "Creating..." : "Register"}
             </button>
-          )
-        }
+          </form>
 
-        <button
-          className="close-btn"
-          onClick={close}
-        >
-          Close
-        </button>
-
+          <div className="auth-link">
+            Already have an account?<Link to="/"> Login</Link>
+          </div>
+        </div>
       </div>
-
-    </div>
   );
 }
