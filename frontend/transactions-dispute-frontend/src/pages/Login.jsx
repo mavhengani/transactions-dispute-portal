@@ -28,58 +28,74 @@ export default function Login() {
       navigate("/home");
     } catch (err) {
       console.error(err);
-      setError(err.response?.data || "Invalid username or password");
+      // Extract error message from response object or string
+      let errorMessage = "Invalid username or password";
+
+      if (err.response?.data) {
+        const data = err.response.data;
+        // Handle both object responses and string responses
+        if (typeof data === 'string') {
+          errorMessage = data;
+        } else {
+          // Try to extract message from error response object
+          errorMessage = data.error || data.message || errorMessage;
+        }
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
+
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="auth-page">
-      <div className="auth-card">
-        <h1>Welcome Back</h1>
-        <p>Secure banking dispute portal</p>
+      <div className="auth-page">
+        <div className="auth-card">
+          <h1>Welcome Back</h1>
+          <p>Secure banking dispute portal</p>
 
-        {error && <p className="auth-error">{error}</p>}
+          {error && <p className="auth-error">{error}</p>}
 
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="username"
-            placeholder="Username"
-            value={form.username}
-            onChange={handleChange}
-            required
-          />
-
-          <div className="password-field">
+          <form onSubmit={handleSubmit}>
             <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              placeholder="Password"
-              value={form.password}
-              onChange={handleChange}
-              required
+                type="text"
+                name="username"
+                placeholder="Username"
+                value={form.username}
+                onChange={handleChange}
+                required
             />
-            <label className="show-password">
+
+            <div className="password-field">
               <input
-                type="checkbox"
-                checked={showPassword}
-                onChange={() => setShowPassword((v) => !v)}
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Password"
+                  value={form.password}
+                  onChange={handleChange}
+                  required
               />
-              Show password
-            </label>
+              <label className="show-password">
+                <input
+                    type="checkbox"
+                    checked={showPassword}
+                    onChange={() => setShowPassword((v) => !v)}
+                />
+                Show password
+              </label>
+            </div>
+
+            <button type="submit" disabled={loading}>
+              {loading ? "Logging in..." : "Login"}
+            </button>
+          </form>
+
+          <div className="auth-link">
+            Don't have an account?<Link to="/register"> Register</Link>
           </div>
-
-          <button type="submit" disabled={loading}>
-            {loading ? "Logging in..." : "Login"}
-          </button>
-        </form>
-
-        <div className="auth-link">
-          Don't have an account?<Link to="/register"> Register</Link>
         </div>
       </div>
-    </div>
   );
 }
