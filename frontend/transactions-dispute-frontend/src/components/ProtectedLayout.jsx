@@ -1,9 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom";
 
-import { useAuth } from "/Users/londolanindou/Projects /rotondwa/transactions-dispute-portal/frontend/transactions-dispute-frontend/src/context/AuthContext";
-
-import LoadingSpinner from "/Users/londolanindou/Projects /rotondwa/transactions-dispute-portal/frontend/transactions-dispute-frontend/src/components/LoadingSpinner";
-
+import { useAuth } from "../context/AuthContext";
+import LoadingSpinner from "../components/LoadingSpinner";
 export default function ProtectedLayout() {
 
   const { user, loading } = useAuth();
