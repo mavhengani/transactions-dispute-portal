@@ -2,13 +2,13 @@ import { useEffect, useState, useCallback } from "react";
 
 import { Link } from "react-router-dom";
 
-import { useAuth } from "/Users/londolanindou/Projects /rotondwa/transactions-dispute-portal/frontend/transactions-dispute-frontend/src/context/AuthContext";
+import { useAuth } from "../context/AuthContext";
+import api from "../api/axios";
 
-import api from "/Users/londolanindou/Projects /rotondwa/transactions-dispute-portal/frontend/transactions-dispute-frontend/src/api/axios";
+import "../home.css";
 
-import "/Users/londolanindou/Projects /rotondwa/transactions-dispute-portal/frontend/transactions-dispute-frontend/src/home.css";
-import TransactionCard from "/Users/londolanindou/Projects /rotondwa/transactions-dispute-portal/frontend/transactions-dispute-frontend/src/components/TransactionCard";
-import TransactionModal from "/Users/londolanindou/Projects /rotondwa/transactions-dispute-portal/frontend/transactions-dispute-frontend/src/components/TransactionModal";
+import TransactionCard from "../components/TransactionCard";
+import TransactionModal from "../components/TransactionModal";
 
 const FILTERS = [
   { label: "All", value: "ALL" },
