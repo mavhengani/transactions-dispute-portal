@@ -43,72 +43,84 @@ export default function Register() {
       navigate("/");
     } catch (err) {
       console.error(err);
-      setError(
-        err.response?.data
-          ? JSON.stringify(err.response.data)
-          : "Registration failed"
-      );
+      // Extract error message from response object or string
+      let errorMessage = "Registration failed";
+
+      if (err.response?.data) {
+        const data = err.response.data;
+        // Handle both object responses and string responses
+        if (typeof data === 'string') {
+          errorMessage = data;
+        } else {
+          // Try to extract message from error response object
+          errorMessage = data.error || data.message || errorMessage;
+        }
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
+
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="auth-page">
-      <div className="auth-card register-card">
-        <h1>Create Account</h1>
+      <div className="auth-page">
+        <div className="auth-card register-card">
+          <h1>Create Account</h1>
 
-        {error && <p className="auth-error">{error}</p>}
+          {error && <p className="auth-error">{error}</p>}
 
-        <form onSubmit={handleSubmit}>
-          <input name="firstName" placeholder="First Name" onChange={handleChange} required />
-          <input name="lastName" placeholder="Last Name" onChange={handleChange} required />
-          <input name="username" placeholder="Username" onChange={handleChange} required />
+          <form onSubmit={handleSubmit}>
+            <input name="firstName" placeholder="First Name" onChange={handleChange} required />
+            <input name="lastName" placeholder="Last Name" onChange={handleChange} required />
+            <input name="username" placeholder="Username" onChange={handleChange} required />
 
-          <div className="password-field">
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              placeholder="Password"
-              onChange={handleChange}
-              required
-            />
-            <input
-              type={showPassword ? "text" : "password"}
-              name="confirmPassword"
-              placeholder="Confirm Password"
-              onChange={handleChange}
-              required
-            />
-            <label className="show-password">
+            <div className="password-field">
               <input
-                type="checkbox"
-                checked={showPassword}
-                onChange={() => setShowPassword((v) => !v)}
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Password"
+                  onChange={handleChange}
+                  required
               />
-              Show passwords
-            </label>
+              <input
+                  type={showPassword ? "text" : "password"}
+                  name="confirmPassword"
+                  placeholder="Confirm Password"
+                  onChange={handleChange}
+                  required
+              />
+              <label className="show-password">
+                <input
+                    type="checkbox"
+                    checked={showPassword}
+                    onChange={() => setShowPassword((v) => !v)}
+                />
+                Show passwords
+              </label>
+            </div>
+
+            <input name="cellphone" placeholder="Cellphone" onChange={handleChange} required />
+
+            <select name="gender" onChange={handleChange} required>
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+
+            <input name="cardNumber" placeholder="Card Number" onChange={handleChange} required />
+
+            <button type="submit" disabled={loading}>
+              {loading ? "Creating..." : "Register"}
+            </button>
+          </form>
+
+          <div className="auth-link">
+            Already have an account?<Link to="/"> Login</Link>
           </div>
-
-          <input name="cellphone" placeholder="Cellphone" onChange={handleChange} required />
-
-          <select name="gender" onChange={handleChange} required>
-            <option value="">Select Gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-          </select>
-
-          <input name="cardNumber" placeholder="Card Number" onChange={handleChange} required />
-
-          <button type="submit" disabled={loading}>
-            {loading ? "Creating..." : "Register"}
-          </button>
-        </form>
-
-        <div className="auth-link">
-          Already have an account?<Link to="/"> Login</Link>
         </div>
       </div>
-    </div>
   );
 }
