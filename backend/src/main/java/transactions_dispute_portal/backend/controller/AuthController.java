@@ -41,13 +41,23 @@ public class AuthController {
     @PostMapping("/register")
     public User register(@RequestBody RegisterRequest request) {
 
+        // Check if username already exists
+        if (repo.existsByUsername(request.getUsername())) {
+            throw new RuntimeException("Username already exists");
+        }
+
+        // Check if cellphone already exists
+        if (repo.existsByCellphone(request.getCellphone())) {
+            throw new RuntimeException("Cellphone already exists");
+        }
+
         User user = new User();
 
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setUsername(request.getUsername());
 
-        // 🔥 FIX: hash password
+        //hash password
         user.setPassword(
                 passwordEncoder.encode(request.getPassword())
         );

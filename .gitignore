@@ -234,8 +234,10 @@ jspm_packages/
 # MySQL data directory
 mysql-data/
 
-# Application specific
-application.properties
-application.yml
-application-*.properties
-application-*.yml
+# Docker logs and data
+backend/logs/
+docker-volumes/
+
+# Docker-specific ignores
+.dockerignore
+docker-info.txt

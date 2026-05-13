@@ -1,0 +1,41 @@
+.git
+.gitignore
+.env
+.env.local
+.env.*.local
+.DS_Store
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Build output
+dist/
+build/
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+*~
+.project
+.classpath
+
+# Testing
+coverage/
+.nyc_output/
+
+# Documentation
+README.md
+HELP.md
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Dependencies
+.cache
+

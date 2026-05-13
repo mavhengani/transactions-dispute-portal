@@ -1,0 +1,34 @@
+# Docker Compose Override for Local Development
+
+# Use this file for local development with additional debugging
+# Run: docker-compose -f docker-compose.yml -f docker-compose.override.yml up
+
+version: "3.8"
+
+services:
+  backend:
+    environment:
+      # Enable detailed logging in development
+      SPRING_JPA_SHOW_SQL: "true"
+      LOGGING_LEVEL_ROOT: "DEBUG"
+      LOGGING_LEVEL_TRANSACTIONS_DISPUTE_PORTAL: "DEBUG"
+    # Mount source code for hot reload (if supported)
+    volumes:
+      - ./backend/src:/app/src
+    ports:
+      - "9010:9010"  # JMX debugging port
+
+  frontend:
+    environment:
+      # Development API URL
+      VITE_API_BASE_URL: "http://localhost:8080"
+    # Use development server instead of production build
+    command: npm run dev
+
+  mysql:
+    environment:
+      # Verbose logging in development
+      MYSQL_LOG_CONSOLE: "true"
+    ports:
+      - "3306:3306"
+
