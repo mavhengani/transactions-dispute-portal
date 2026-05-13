@@ -4,17 +4,15 @@ import {
   Route,
 } from "react-router-dom";
 
-import Login from "/Users/londolanindou/Projects /rotondwa/transactions-dispute-portal/frontend/transactions-dispute-frontend/src/pages/Login";
-import Register from "/Users/londolanindou/Projects /rotondwa/transactions-dispute-portal/frontend/transactions-dispute-frontend/src/pages/Register";
-import Home from "/Users/londolanindou/Projects /rotondwa/transactions-dispute-portal/frontend/transactions-dispute-frontend/src/pages/Home";
-import About from "/Users/londolanindou/Projects /rotondwa/transactions-dispute-portal/frontend/transactions-dispute-frontend/src/pages/About";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Home from "./pages/Home";
+import About from "./pages/About";
 
-import { AuthProvider } from "/Users/londolanindou/Projects /rotondwa/transactions-dispute-portal/frontend/transactions-dispute-frontend/src/context/AuthContext";
+import { AuthProvider } from "./context/AuthContext";
 
-import ProtectedLayout from "/Users/londolanindou/Projects /rotondwa/transactions-dispute-portal/frontend/transactions-dispute-frontend/src/components/ProtectedLayout";
-
-import ErrorBoundary from "/Users/londolanindou/Projects /rotondwa/transactions-dispute-portal/frontend/transactions-dispute-frontend/src/components/ErrorBoundary";
-
+import ProtectedLayout from "./components/ProtectedLayout";
+import ErrorBoundary from "./components/ErrorBoundary";
 export default function App() {
 
   return (
