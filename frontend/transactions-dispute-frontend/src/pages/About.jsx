@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
-import "/Users/londolanindou/Projects /rotondwa/transactions-dispute-portal/frontend/transactions-dispute-frontend/src/About.css";
-
+import "../About.css";
 export default function About() {
   return (
     <div className="about-page">
