@@ -1,5 +1,4 @@
-import api from "/Users/londolanindou/Projects /rotondwa/transactions-dispute-portal/frontend/transactions-dispute-frontend/src/api/axios";
-
+import api from "../api/axios";
 export default function TransactionModal({
                                            tx,
                                            close,
